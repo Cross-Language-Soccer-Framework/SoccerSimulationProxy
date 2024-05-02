@@ -250,7 +250,12 @@ void StateGenerator::updatePlayerObject(protos::Player *p, const rcsc::PlayerObj
     p->set_angle_from_ball(static_cast<float>(player->angleFromBall().degree()));
     p->set_ball_reach_steps(player->ballReachStep());
     p->set_is_tackling(player->isTackling());
-    p->set_type_id(player->playerTypePtr()->id());
+    if(player->playerTypePtr()==nullptr){
+        p->set_type_id(0);    
+    }
+    else{
+        p->set_type_id(player->playerTypePtr()->id());
+    }
 }
 
 /**
@@ -272,7 +277,12 @@ void StateGenerator::updatePlayerObject(protos::Player *p, const rcsc::CoachPlay
     p->set_is_kicking(player->isKicking());
     p->set_ball_reach_steps(player->ballReachStep());
     p->set_is_tackling(player->isTackling());
-    p->set_type_id(player->playerTypePtr()->id());
+    if(player->playerTypePtr()==nullptr){
+        p->set_type_id(0);    
+    }
+    else{
+        p->set_type_id(player->playerTypePtr()->id());
+    }
 }
 
 /**
@@ -483,11 +493,18 @@ protos::WorldModel *StateGenerator::convertCoachWorldModel(const rcsc::CoachWorl
     res->set_allocated_ball(convertBall(wm.ball()));
     for (auto player : wm.teammates())
     {
+        
+        if(player == nullptr || !player->isValid() || player->unum() < 1 || player->unum() > 11 ){
+            continue;
+        }
         auto p = res->add_teammates();
         updatePlayerObject(p, player);
     }
     for (auto player : wm.opponents())
     {
+        if(player == nullptr || !player->isValid() || player->unum() < 1 || player->unum() > 11 ){
+            continue;
+        }
         auto p = res->add_opponents();
         updatePlayerObject(p, player);
     }
