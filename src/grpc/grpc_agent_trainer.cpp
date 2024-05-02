@@ -1,5 +1,5 @@
 #include "grpc_agent_trainer.h"
-// #include "state_generator.h"
+#include "state_generator.h"
 
 #include <rcsc/player/say_message_builder.h>
 #include <rcsc/common/player_param.h>
@@ -274,8 +274,8 @@ void GrpcAgentTrainer::getActions() const
 State GrpcAgentTrainer::generateState() const
 {
     auto &wm = M_agent->world();
-    // WorldModel * worldModel = StateGenerator::convertCoachWorldModel(wm);
+    WorldModel * worldModel = StateGenerator::convertCoachWorldModel(wm);
     State state;
-    // state.set_allocated_world_model(worldModel);
+    state.set_allocated_world_model(worldModel);
     return state;
 }
